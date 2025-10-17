@@ -1,42 +1,37 @@
-module alu(       
-  input [31:0] a0,b0,
-  output reg [31:0] y0,
-  input [2:0] sel,
-  input init_a,init_b,init_y
+module uartx(
+  input [7:0] data,
+  input tx_ready,
+  input s_clk,
+  output tx_line,
+  output busy_flag
 );
+  reg [3:0] q;
+  reg [9:0] s_reg=10'b1111111111;
+  reg n_clk;
+  reg [9:0] tx_wire=10'b0000000000;
   
-  reg [31:0] a,b,y;
-
-  always@(posedge init_a or init_b) begin
-    if (init_a)
-      a<=a0;
-    if (init_b)
-      b<=b0;
+  assign busy_flag=(q!=0);
+  
+  always@(posedge s_clk)begin
+    if (q==4'd9)begin
+      n_clk=1;
+      q<=0;
+    end
+    else begin 
+      q<=q+1;
+      n_clk=0;
+    end
   end
-  
+
   always@(*) begin
-    case (sel)
-      3'b000: y=a+b;
-      3'b001: y=a-b;
-      3'b010: y=a|b;
-      3'b011: y=a&b;
-      3'b100: y=a^b;
-      3'b101: y=~a;
-      3'b110: y= a << 1;
-      3'b111: begin                      
-        if (a < b)
-        y = 32'd1;                      
-        else if (a == b)
-        y = 32'd2;                      
-        else
-        y = 32'd3;                     
+    if (tx_ready)begin
+      if (busy_flag) begin
+        s_reg={1'b1,data,1'b1};
       end
-      default: y=32'd0;
-    endcase
+    end
   end
-
-  always@(posedge init_y) begin
-    y0<=y;
-  end 
   
+  always@(posedge n_clk)begin
+    tx_wire<={s_reg[6:0],0};
+  end 
 endmodule
