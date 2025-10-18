@@ -1,11 +1,10 @@
-module uart_tx(
-  parameter clk_freq=50000000,
-  parameter baud_rate=9600
-)(
-  input wire clk,reset,tx_start,
-  input wire [7:0] data,
-  output reg tx_line,tx_busy,tx_done
-);
+module uart_tx(clk,reset,tx_start,data,tx_line,tx_busy,tx_done);
+  parameter clk_freq=50000000;
+  parameter baud_rate=9600;
+
+  input wire clk,reset,tx_start;
+  input wire [7:0] data;
+  output reg tx_line,tx_busy,tx_done;
   localparam clks_per_bit=clk_freq/baud_rate;
   reg [15:0] clk_count;
   reg [3:0] bit_index;
