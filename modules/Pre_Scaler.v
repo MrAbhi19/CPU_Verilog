@@ -1,11 +1,10 @@
-module pre_scaler (
-  
+module pre_scaler #(
+  parameter DIVISOR=4
+)(
   input wire clk_in,
   input wire reset_n,
   output reg clk_out
 );
-
-  localparam DIVISOR = 4;
   reg [$clog2(DIVISOR)-1:0] bit_count; 
 
   always @(posedge clk_in or negedge reset_n) begin
