@@ -26,6 +26,7 @@ Examples:
 
 - SPI (Master and Slaves)
 - UART (Receiver and Transmitter)
+- ALU
 - Full Adder  
 - Bidirectional Counter  
 - Pre-Scaler  
