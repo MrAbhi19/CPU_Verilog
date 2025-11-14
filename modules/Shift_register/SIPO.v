@@ -29,8 +29,11 @@ module sipo #(
       end
       else begin
         bit_count <= bit_count + 1;
-        done <= 0;
       end
+    end
+    else begin
+      busy<=0;
+      done<=0;
     end
   end
 endmodule
